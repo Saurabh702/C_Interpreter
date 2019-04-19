@@ -90,6 +90,9 @@ struct token get_next_token(struct Interpreter *i)
 
 int main()
 {
+	//Turn off buffering in stdout
+	setvbuf(stdout, NULL, _IONBF, 0);
+	
 	struct Interpreter i;
     i.text = malloc(sizeof(char*));
 
