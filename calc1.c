@@ -140,8 +140,10 @@ Token get_next_token(Interpreter *i)
 		current_char.ptr[0] = i->text[++i->pos];
 	
 	if(isdigit(current_char.ptr[0]))
-    {
-        i->pos++;
+    {	int j = 0;
+        while(isdigit(i->text[++i->pos]))
+			current_char.ptr[++j] = i->text[i->pos];
+		current_char.ptr[++j] = '\0';
         return (Token){"INTEGER",current_char};
     }
     else if(current_char.ptr[0] == '+')
@@ -180,12 +182,15 @@ int main()
 	{
 		setjmp(resume_here); //check
 		printf("calc> ");
-		//scanf("%s",i.text); //free i.text //for whitespaces use get
+		//scanf("%s",i.text);  //for whitespaces use gets
 		gets(i.text);
 		if(strcmp(i.text,"exit") == 0)
 			break;
 
 		interpret(&i);
 	}
+	
+	free(i.text);
+	
 	return 0;
 }
