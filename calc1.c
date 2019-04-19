@@ -68,15 +68,47 @@ void interpret(Interpreter *i)
     //printf("%s %d %s %s\n",i->text,i->pos,i->current_token.type,i->current_token.value.ptr);
     left = i->current_token;
     parse(i,"INTEGER");
-	
+	int flag = 0;
     op = i->current_token;
-    parse(i,"PLUS");
-
+	
+    if(strcmp(op.type,"PLUS") == 0)
+	{
+		parse(i,"PLUS");
+		flag = 1;
+	}
+	else if(strcmp(op.type,"MINUS") == 0)
+	{
+		parse(i,"MINUS");
+		flag = 2;
+	}
+	else if(strcmp(op.type,"MULTIPLY") == 0)
+	{
+		parse(i,"MULTIPLY");
+		flag = 3;
+	}
+	else if(strcmp(op.type,"DIVIDE") == 0)
+	{
+		parse(i,"DIVIDE");
+		flag = 4;
+	}
+	else
+		parse_error();
+	
     right = i->current_token;
     parse(i,"INTEGER");
-	//printf("hello");
-	//printf("%s , %s \n",left.value.ptr,op.value.ptr);
-    result = atoi(left.value.ptr) + atoi(right.value.ptr);
+	
+    switch(flag)
+	{
+		case 1:	result = atoi(left.value.ptr) + atoi(right.value.ptr);
+				break;
+		case 2: result = atoi(left.value.ptr) - atoi(right.value.ptr);
+				break;
+		case 3: result = atoi(left.value.ptr) * atoi(right.value.ptr);
+				break;
+		case 4: result = atoi(left.value.ptr) / atoi(right.value.ptr);
+				break;
+	}
+	
     printf("%d\n",result);
 }
 
@@ -103,8 +135,8 @@ Token get_next_token(Interpreter *i)
 		return (Token){"EOF",current_char};
 
     current_char.ptr[0] = i->text[i->pos];
-
-    if(isdigit(current_char.ptr[0]))
+	
+	if(isdigit(current_char.ptr[0]))
     {
         i->pos++;
         return (Token){"INTEGER",current_char};
@@ -114,8 +146,23 @@ Token get_next_token(Interpreter *i)
         i->pos++;
         return (Token){"PLUS",current_char};
     }
+	else if(current_char.ptr[0] == '-')
+	{
+		i->pos++;
+        return (Token){"MINUS",current_char};
+	}
+	else if(current_char.ptr[0] == '*')
+	{
+		i->pos++;
+        return (Token){"MULTIPLY",current_char};
+	}
+	else if(current_char.ptr[0] == '/')
+	{
+		i->pos++;
+        return (Token){"DIVIDE",current_char};
+	}
     else
-        parse_error();
+		parse_error();
 }
 
 int main()
