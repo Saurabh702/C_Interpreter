@@ -116,9 +116,9 @@ void parse(Interpreter *i,char *type)
 {
         //printf("%s %d %s %s\n",i->text,i->pos,i->current_token.type,i->current_token.value.ptr);
 		if(strcmp(i->current_token.type,type) == 0)
-            i->current_token = get_next_token(i);
+			i->current_token = get_next_token(i);
         else
-            parse_error();
+			parse_error();
 }
 
 void parse_error()
@@ -135,6 +135,9 @@ Token get_next_token(Interpreter *i)
 		return (Token){"EOF",current_char};
 
     current_char.ptr[0] = i->text[i->pos];
+	
+	while(isspace(current_char.ptr[0]))
+		current_char.ptr[0] = i->text[++i->pos];
 	
 	if(isdigit(current_char.ptr[0]))
     {
@@ -177,8 +180,8 @@ int main()
 	{
 		setjmp(resume_here); //check
 		printf("calc> ");
-		scanf("%s",i.text); //free i.text
-
+		//scanf("%s",i.text); //free i.text //for whitespaces use get
+		gets(i.text);
 		if(strcmp(i.text,"exit") == 0)
 			break;
 
