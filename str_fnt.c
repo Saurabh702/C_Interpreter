@@ -16,5 +16,5 @@ void init_string(string *s,int len)
 
 void display_string(string s)
 {
-    printf("%s",s.ptr);
+    printf("%s\n",s.ptr);
 }

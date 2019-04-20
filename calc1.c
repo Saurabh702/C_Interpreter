@@ -26,7 +26,7 @@ void parse_error();
 void interpret(Interpreter *i)
 {
     Token left,op,right;
-    int result;
+    int result,flag = 0;
 
     i->pos = 0;
     i->current_token.type = "";
@@ -35,11 +35,9 @@ void interpret(Interpreter *i)
     i->current_token = get_next_token(i);
     left = i->current_token;
     parse(i,"INTEGER");
-
+    //printf("%s %d %s %s\n",i->text,i->pos,i->current_token.type,i->current_token.value.ptr);
     while(strcmp(i->current_token.type,"EOF") != 0)
     {
-        //printf("%s %d %s %s\n",i->text,i->pos,i->current_token.type,i->current_token.value.ptr);
-        int flag = 0;
         op = i->current_token;
 
         if(strcmp(op.type,"PLUS") == 0)
@@ -84,12 +82,13 @@ void interpret(Interpreter *i)
             break;
         }
 
-        itoa(result, left.value.ptr,10);
+        itoa(result, left.value.ptr, 10);
     }
+    if(flag)
+        printf("%d\n",result);
+    else
+        display_string(left.value);
 
-    printf("%d\n",result);
-
-    parse(i,"EOF");
     free(i->current_token.value.ptr);
 }
 
