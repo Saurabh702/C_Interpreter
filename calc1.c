@@ -1,39 +1,10 @@
-#include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
 #include <ctype.h>
 #include <setjmp.h>
+#include "str.h"
 #define MAXLEN 256
 
 jmp_buf resume_here;
-
-typedef struct String
-{
-    char *ptr;
-    size_t len;
-} string;
-
-void init_string(string *,int);
-void display_string(string);
-
-void init_string(string *s,int len)
-{
-    s->len = len;
-    s->ptr = malloc(s->len+1);
-
-    if (s->ptr == NULL)
-    {
-        fprintf(stderr, "malloc() failed\n");
-        exit(EXIT_FAILURE);
-    }
-
-    s->ptr[0] = '\0';
-}
-
-void display_string(string s)
-{
-    printf("%s",s.ptr);
-}
 
 typedef struct Token
 {
@@ -185,9 +156,13 @@ Token get_next_token(Interpreter *i)
         };
     }
     else
-        parse_error();
-	
-	free(current_char.ptr);
+	{
+		free(current_char.ptr);
+		parse_error();
+		return (Token)
+		{"",{"",0}
+		};
+	}
 }
 
 int main()
