@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <setjmp.h>
+#define MAXLEN 256
 
 jmp_buf resume_here;
 
@@ -26,10 +27,7 @@ void init_string(string *s,int len)
         exit(EXIT_FAILURE);
     }
 
-    if(len > 0)
-        s->ptr[len] = '\0';
-    else
-        s->ptr[0] = '\0';
+    s->ptr[0] = '\0';
 }
 
 void display_string(string s)
@@ -62,7 +60,7 @@ void interpret(Interpreter *i)
 
     i->pos = 0;
     i->current_token.type = "";
-    init_string(&i->current_token.value,0);
+    init_string(&i->current_token.value,MAXLEN);
 
     i->current_token = get_next_token(i);
     //printf("%s %d %s %s\n",i->text,i->pos,i->current_token.type,i->current_token.value.ptr);
@@ -114,6 +112,8 @@ void interpret(Interpreter *i)
     }
 
     printf("%d\n",result);
+	
+	free(i->current_token.value.ptr);
 }
 
 void parse(Interpreter *i,char *type)
@@ -134,16 +134,17 @@ void parse_error()
 Token get_next_token(Interpreter *i)
 {
     string current_char;
-    init_string(&current_char,1);
+    init_string(&current_char,MAXLEN);
+	
+	while(isspace(i->text[i->pos]))
+        current_char.ptr[0] = i->text[++i->pos];
+	
     if (i->pos > strlen(i->text) - 1)
         return (Token)
     {"EOF",current_char
     };
 
     current_char.ptr[0] = i->text[i->pos];
-
-    while(isspace(current_char.ptr[0]))
-        current_char.ptr[0] = i->text[++i->pos];
 
     if(isdigit(current_char.ptr[0]))
     {
@@ -185,6 +186,8 @@ Token get_next_token(Interpreter *i)
     }
     else
         parse_error();
+	
+	free(current_char.ptr);
 }
 
 int main()
@@ -193,7 +196,7 @@ int main()
     setvbuf(stdout, NULL, _IONBF, 0);
 
     Interpreter i;
-    i.text = malloc(sizeof(char*));
+    i.text = malloc(sizeof(char*) * MAXLEN);
 
     while(1)
     {
