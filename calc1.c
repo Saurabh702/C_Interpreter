@@ -1,4 +1,3 @@
-#include <string.h>
 #include <ctype.h>
 #include <setjmp.h>
 #include "str.h"
@@ -66,6 +65,8 @@ void interpret(Interpreter *i)
     right = i->current_token;
     parse(i,"INTEGER");
 
+    parse(i,"EOF");
+
     switch(flag)
     {
     case 1:
@@ -83,8 +84,8 @@ void interpret(Interpreter *i)
     }
 
     printf("%d\n",result);
-	
-	free(i->current_token.value.ptr);
+
+    free(i->current_token.value.ptr);
 }
 
 void parse(Interpreter *i,char *type)
@@ -106,10 +107,10 @@ Token get_next_token(Interpreter *i)
 {
     string current_char;
     init_string(&current_char,MAXLEN);
-	
-	while(isspace(i->text[i->pos]))
+
+    while(isspace(i->text[i->pos]))
         current_char.ptr[0] = i->text[++i->pos];
-	
+
     if (i->pos > strlen(i->text) - 1)
         return (Token)
     {"EOF",current_char
@@ -156,13 +157,13 @@ Token get_next_token(Interpreter *i)
         };
     }
     else
-	{
-		free(current_char.ptr);
-		parse_error();
-		return (Token)
-		{"",{"",0}
-		};
-	}
+    {
+        free(current_char.ptr);
+        parse_error();
+        return (Token)
+        {"", {"",0}
+        };
+    }
 }
 
 int main()
