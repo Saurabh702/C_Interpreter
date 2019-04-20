@@ -1,0 +1,25 @@
+Simple TESTS:
+
+Input                             Output
+
+10+10                             20
+10-10                             0
+1+2                               3
+1+2+3-5                           1
+1*1                               1
+-1*-1                             Error Parsing Input
+10/10                             1
+100/-1                            Error Parsing Input
+
+
+
+Complex TESTS:
+
+Input                             Output
+
+1*100/100-100*100                 -9900
+100*100/100*100-100                9900
+10*100-/100/100                    Error Parsing Input
+100/100/100                        0
+()()()()()                         Error Parsing Input
+1234565+12341231                   13575796
