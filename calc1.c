@@ -60,6 +60,11 @@ void interpret(Interpreter *i)
             parse(i,"DIVIDE");
             flag = 4;
         }
+	else if(strcmp(op.type,"MODULUS") == 0)
+	{
+		parse(i,"MODULUS");
+		flag = 5;
+	}
         else
             parse_error();
 
@@ -80,6 +85,9 @@ void interpret(Interpreter *i)
         case 4:
             result = atoi(left.value.ptr) / atoi(right.value.ptr);
             break;
+	case 5:
+	    result = atoi(left.value.ptr) % atoi(right.value.ptr);
+	    break;
         }
 
         snprintf(left.value.ptr, sizeof(left.value.ptr),"%d", result);
@@ -159,6 +167,11 @@ Token get_next_token(Interpreter *i)
         return (Token)
         {"DIVIDE",current_char
         };
+    }
+    else if(current_char.ptr[0] == '%')
+    {
+	i->pos++;
+	return (Token){"MODULUS",current_char};
     }
     else
     {
