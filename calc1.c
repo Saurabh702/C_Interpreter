@@ -82,7 +82,7 @@ void interpret(Interpreter *i)
             break;
         }
 
-        itoa(result, left.value.ptr, 10);
+        snprintf(left.value.ptr, sizeof(left.value.ptr),"%d", result);
     }
     if(flag)
         printf("%d\n",result);
