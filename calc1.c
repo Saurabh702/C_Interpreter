@@ -33,58 +33,63 @@ void interpret(Interpreter *i)
     init_string(&i->current_token.value,MAXLEN);
 
     i->current_token = get_next_token(i);
-    //printf("%s %d %s %s\n",i->text,i->pos,i->current_token.type,i->current_token.value.ptr);
     left = i->current_token;
     parse(i,"INTEGER");
-    int flag = 0;
-    op = i->current_token;
 
-    if(strcmp(op.type,"PLUS") == 0)
+    while(strcmp(i->current_token.type,"EOF") != 0)
     {
-        parse(i,"PLUS");
-        flag = 1;
-    }
-    else if(strcmp(op.type,"MINUS") == 0)
-    {
-        parse(i,"MINUS");
-        flag = 2;
-    }
-    else if(strcmp(op.type,"MULTIPLY") == 0)
-    {
-        parse(i,"MULTIPLY");
-        flag = 3;
-    }
-    else if(strcmp(op.type,"DIVIDE") == 0)
-    {
-        parse(i,"DIVIDE");
-        flag = 4;
-    }
-    else
-        parse_error();
+        //printf("%s %d %s %s\n",i->text,i->pos,i->current_token.type,i->current_token.value.ptr);
+        int flag = 0;
+        op = i->current_token;
 
-    right = i->current_token;
-    parse(i,"INTEGER");
+        if(strcmp(op.type,"PLUS") == 0)
+        {
+            parse(i,"PLUS");
+            flag = 1;
+        }
+        else if(strcmp(op.type,"MINUS") == 0)
+        {
+            parse(i,"MINUS");
+            flag = 2;
+        }
+        else if(strcmp(op.type,"MULTIPLY") == 0)
+        {
+            parse(i,"MULTIPLY");
+            flag = 3;
+        }
+        else if(strcmp(op.type,"DIVIDE") == 0)
+        {
+            parse(i,"DIVIDE");
+            flag = 4;
+        }
+        else
+            parse_error();
 
-    parse(i,"EOF");
+        right = i->current_token;
+        parse(i,"INTEGER");
 
-    switch(flag)
-    {
-    case 1:
-        result = atoi(left.value.ptr) + atoi(right.value.ptr);
-        break;
-    case 2:
-        result = atoi(left.value.ptr) - atoi(right.value.ptr);
-        break;
-    case 3:
-        result = atoi(left.value.ptr) * atoi(right.value.ptr);
-        break;
-    case 4:
-        result = atoi(left.value.ptr) / atoi(right.value.ptr);
-        break;
+        switch(flag)
+        {
+        case 1:
+            result = atoi(left.value.ptr) + atoi(right.value.ptr);
+            break;
+        case 2:
+            result = atoi(left.value.ptr) - atoi(right.value.ptr);
+            break;
+        case 3:
+            result = atoi(left.value.ptr) * atoi(right.value.ptr);
+            break;
+        case 4:
+            result = atoi(left.value.ptr) / atoi(right.value.ptr);
+            break;
+        }
+
+        itoa(result, left.value.ptr,10);
     }
 
     printf("%d\n",result);
 
+    parse(i,"EOF");
     free(i->current_token.value.ptr);
 }
 
