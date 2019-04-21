@@ -31,7 +31,8 @@ int factor(Interpreter *i)
 	int curfactor;
 	Token fact = i->current_token;
 	parse(i,"INTEGER");
-	snprintf(fact.value.ptr,sizeof(fact.value.ptr),"%d",curfactor);
+	//snprintf(fact.value.ptr,sizeof(fact.value.ptr),"%d",curfactor);
+	curfactor = atoi(fact.value.ptr);
 	return curfactor;
 }
 
@@ -168,7 +169,7 @@ void interpret(Interpreter *i)
 {
 	i->pos = 0;
 	i->current_token.type = "";
-	init_string(&i->current_token.value,100);
+	init_string(&i->current_token.value,MAXLEN);
 	i->current_token = get_next_token(i);
 	//Token result = expr(i);
 	expr(i);
