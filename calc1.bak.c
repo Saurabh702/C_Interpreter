@@ -39,17 +39,17 @@ int factor(Interpreter *i)
 int term(Interpreter *i)
 {
 	int t = factor(i);
-	while ((strcmp(i->current_token.type,"MUL") == 0) || (strcmp(i->current_token.type,"DIV") == 0))
+	while ((strcmp(i->current_token.type,"MULTIPLY") == 0) || (strcmp(i->current_token.type,"DIVIDE") == 0))
 	{
 		Token tok = i->current_token;
-		if (strcmp(tok.type,"MUL") == 0)
+		if (strcmp(tok.type,"MULTIPLY") == 0)
 		{
-			parse(i,"MUL");
+			parse(i,"MULTIPLY");
 			t = t * factor(i);
 		}
 		else
 		{
-			parse(i,"DIV");
+			parse(i,"DIVIDE");
 			t = t / factor(i);
 		}
 	}
