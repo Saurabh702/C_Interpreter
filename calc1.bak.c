@@ -31,7 +31,6 @@ int factor(Interpreter *i)
 	int curfactor;
 	Token fact = i->current_token;
 	parse(i,"INTEGER");
-	//snprintf(fact.value.ptr,sizeof(fact.value.ptr),"%d",curfactor);
 	curfactor = atoi(fact.value.ptr);
 	return curfactor;
 }
@@ -39,6 +38,8 @@ int factor(Interpreter *i)
 int term(Interpreter *i)
 {
 	int t = factor(i);
+	if (strcmp(i->current_token.type,"INTEGER") == 0)
+		parse_error();
 	while ((strcmp(i->current_token.type,"MULTIPLY") == 0) || (strcmp(i->current_token.type,"DIVIDE") == 0))
 	{
 		Token tok = i->current_token;
@@ -58,7 +59,7 @@ int term(Interpreter *i)
 
 void expr(Interpreter *i)
 {
-	Token result;
+	//Token result;
 	int res = term(i);
 	while ((strcmp(i->current_token.type,"PLUS") == 0) || (strcmp(i->current_token.type,"MINUS") == 0) || (strcmp(i->current_token.type,"MODULUS") == 0))
 	{
@@ -85,103 +86,19 @@ void expr(Interpreter *i)
 	printf("%d\n",res);
 }
 
-
-/*void interpret(Interpreter *i)
-{
-    Token left,op,right;
-    int result,flag = 0;
-
-    i->pos = 0;
-    i->current_token.type = "";
-    init_string(&i->current_token.value,MAXLEN);
-
-    i->current_token = expr(i);
-    left = i->current_token;
-    parse(i,"INTEGER");
-    //printf("%s %d %s %s\n",i->text,i->pos,i->current_token.type,i->current_token.value.ptr);
-    while(strcmp(i->current_token.type,"EOF") != 0)
-    {
-        op = i->current_token;
-
-        if(strcmp(op.type,"PLUS") == 0)
-        {
-            parse(i,"PLUS");
-            flag = 1;
-        }
-        else if(strcmp(op.type,"MINUS") == 0)
-        {
-            parse(i,"MINUS");
-            flag = 2;
-        }
-        else if(strcmp(op.type,"MULTIPLY") == 0)
-        {
-            parse(i,"MULTIPLY");
-            flag = 3;
-        }
-        else if(strcmp(op.type,"DIVIDE") == 0)
-        {
-            parse(i,"DIVIDE");
-            flag = 4;
-        }
-	else if(strcmp(op.type,"MODULUS") == 0)
-	{
-		parse(i,"MODULUS");
-		flag = 5;
-	}
-        else
-            parse_error();
-
-        right = i->current_token;
-        parse(i,"INTEGER");
-
-        switch(flag)
-        {
-        case 1:
-            result = atoi(left.value.ptr) + atoi(right.value.ptr);
-            break;
-        case 2:
-            result = atoi(left.value.ptr) - atoi(right.value.ptr);
-            break;
-        case 3:
-            result = atoi(left.value.ptr) * atoi(right.value.ptr);
-            break;
-        case 4:
-            result = atoi(left.value.ptr) / atoi(right.value.ptr);
-            break;
-	case 5:
-	    result = atoi(left.value.ptr) % atoi(right.value.ptr);
-	    break;
-        }
-
-        snprintf(left.value.ptr, sizeof(left.value.ptr),"%d", result);
-    }
-    if(flag)
-        printf("%d\n",result);
-    else
-        display_string(left.value);
-
-    free(i->current_token.value.ptr);
-    //printf("%d\n",i->current_token.value);
-    //free(i->current_token.value.ptr);
-}*/
-
 void interpret(Interpreter *i)
 {
+	//space check from main interpret function
 	i->pos = 0;
 	i->current_token.type = "";
 	init_string(&i->current_token.value,MAXLEN);
 	i->current_token = get_next_token(i);
-	//Token result = expr(i);
 	expr(i);
-	//int res;
-	//snprintf(result.value.ptr,sizeof(result.value.ptr),"%d",res);
-	//printf("%d\n",res);
 }
 	
 
 void parse(Interpreter *i,char *type)
 {
-    //printf("%s %d %s %s\n",i->text,i->pos,i->current_token.type,i->current_token.value.ptr);
     if(strcmp(i->current_token.type,type) == 0)
         i->current_token = get_next_token(i);
     else
