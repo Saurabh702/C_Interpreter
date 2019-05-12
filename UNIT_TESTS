@@ -1,0 +1,25 @@
+Simple TESTS:
+
+Input                          ProgOutput			CalculatorOutput
+
+10+10                             20					20
+10-10                             0					0
+1+2                               3					3
+1+2+3-5                           1					1
+1*1                               1					1
+-1*-1                             Error Parsing Input			1
+10/10                             1					1
+100/-1                            Error Parsing Input			-100
+
+
+
+Complex TESTS:
+
+Input                             ProgOutput				CalculatorOutput
+
+1*100/100-100*100                 -9999					  -9999
+100*100/100*100-100                9900					   9900
+10*100-/100/100                    Error Parsing Input			  syntax error
+100/100/100                        0					  0
+()()()()()                         Error Parsing Input			  syntax error
+1234565+12341231                   13575796				  13575796 	
