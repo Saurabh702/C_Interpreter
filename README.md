@@ -68,6 +68,7 @@ Once all the tokens have been generated, the expression is evaluated. Before eva
 <p align = "justify">
 In the above example, the '+' token which is a character is compared with + to find out if the operation to be done is addition or not. If true then the tokens(operands) are added and the result is the output.
 </p>
+
 ## Features
   - Ignores spaces while tokenizing
   - Multiple operations on the same text line
