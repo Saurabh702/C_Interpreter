@@ -88,3 +88,5 @@ In the above example, the '+' token which is a character is compared with + to f
    9
 3. calc> 1*100/100 - 100 + 1<br>
    -98
+
+__NOTE :__ For more info about this project, click [this](https://github.com/Saurabh702/C_Interpreter/blob/master/Documentation.pdf)
